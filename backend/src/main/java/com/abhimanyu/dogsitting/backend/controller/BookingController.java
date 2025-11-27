@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -25,4 +26,10 @@ public class BookingController {
     public BookingResponse create(@Valid @RequestBody BookingRequest request) {
         return service.createBooking(request);
     }
+
+    @GetMapping
+    public List<BookingResponse> getAll(){
+        return service.getAllBookings();
+    }
+
 }

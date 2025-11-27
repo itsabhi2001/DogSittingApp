@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class BookingServiceImpl implements BookingService{
@@ -41,6 +42,18 @@ public class BookingServiceImpl implements BookingService{
 
 
     }
+
+    @Override
+    public List<BookingResponse> getAllBookings(){
+        return  repo.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+
+
+
     private double calculatePrice(Booking booking){
         double basePerNight = switch (booking.getServiceType()) {
             case HOUSE_SITTING -> 55.0;
