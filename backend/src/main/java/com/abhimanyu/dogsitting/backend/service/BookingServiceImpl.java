@@ -5,7 +5,10 @@ import com.abhimanyu.dogsitting.backend.dto.BookingResponse;
 import com.abhimanyu.dogsitting.backend.model.Booking;
 import com.abhimanyu.dogsitting.backend.model.BookingStatus;
 import com.abhimanyu.dogsitting.backend.repository.BookingRepository;
+import com.abhimanyu.dogsitting.backend.exception.BookingNotFoundException;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,7 +54,45 @@ public class BookingServiceImpl implements BookingService{
                 .toList();
     }
 
+    @Override
+    public BookingResponse getBookingById(Long id){
+        Booking booking = repo.findById(id)
+            .orElseThrow(() -> new BookingNotFoundException(id));
 
+        return toResponse(booking);
+    }
+
+    @Override
+    @Transactional
+    public BookingResponse updateBookingStatus(Long id, BookingStatus newStatus){
+        Booking booking = repo.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException(id));
+
+        BookingStatus current = booking.getStatus();
+
+        switch (current) {
+            case PENDING -> {
+                if (newStatus != BookingStatus.CONFIRMED && newStatus != BookingStatus.CANCELED) {
+                    throw new IllegalStateException("PENDING bookings can only move to CONFIRMED or CANCELED.");
+                }
+            }
+            case CONFIRMED -> {
+                if (newStatus != BookingStatus.CANCELED) {
+                    throw new IllegalStateException("CONFIRMED bookings can only be moved to CANCELED.");
+                }
+            }
+            case CANCELED -> {
+                throw new IllegalStateException("CANCELED bookings cannot change status.");
+            }
+        }
+
+
+
+        booking.setStatus(newStatus);
+        Booking saved = repo.save(booking);
+
+        return toResponse(saved);
+    }
 
 
     private double calculatePrice(Booking booking){
