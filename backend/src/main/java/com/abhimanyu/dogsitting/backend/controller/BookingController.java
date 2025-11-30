@@ -5,6 +5,10 @@ import com.abhimanyu.dogsitting.backend.dto.BookingResponse;
 import com.abhimanyu.dogsitting.backend.dto.UpdateBookingStatusRequest;
 import com.abhimanyu.dogsitting.backend.model.BookingStatus;
 import com.abhimanyu.dogsitting.backend.service.BookingService;
+import com.abhimanyu.dogsitting.backend.dto.PriceEstimateRequest;
+import com.abhimanyu.dogsitting.backend.dto.PriceEstimateResponse;
+import com.abhimanyu.dogsitting.backend.dto.BookingStatsResponse;
+
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -30,8 +34,11 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingResponse> getAll(){
-        return service.getAllBookings();
+    public List<BookingResponse> search(
+            @RequestParam(required = false) BookingStatus status,
+            @RequestParam(required = false) String clientEmail
+    ) {
+        return service.searchBookings(status, clientEmail);
     }
 
     @GetMapping("/{id}")
@@ -43,6 +50,29 @@ public class BookingController {
     public BookingResponse updateStatus(@PathVariable Long id, @Valid @RequestBody UpdateBookingStatusRequest request){
         BookingStatus updatedStatus = request.getStatus();
         return  service.updateBookingStatus(id, updatedStatus);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        service.deleteBooking(id);
+    }
+
+    @PutMapping("/{id}")
+    public BookingResponse update(@PathVariable Long id, @Valid @RequestBody BookingRequest request) {
+        return service.updateBooking(id, request);
+    }
+
+    @PostMapping("/estimate")
+    public PriceEstimateResponse estimate(
+            @Valid @RequestBody PriceEstimateRequest request
+    ) {
+        return service.estimatePrice(request);
+    }
+
+    @GetMapping("/stats")
+    public BookingStatsResponse getStats() {
+        return service.getStats();
     }
 
 }
