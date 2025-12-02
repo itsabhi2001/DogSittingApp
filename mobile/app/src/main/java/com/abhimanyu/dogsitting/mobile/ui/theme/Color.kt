@@ -2,10 +2,17 @@ package com.abhimanyu.dogsitting.mobile.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Brand-ish colors (warm / pet-friendly palette)
+val PawOrange = Color(0xFFFF8A3D)
+val PawOrangeDark = Color(0xFFD66D23)
+val PawCream = Color(0xFFFFF3E0)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val PawTeal = Color(0xFF26A69A)
+val PawTealDark = Color(0xFF00796B)
+
+val PawGrayLight = Color(0xFFF5F5F5)
+val PawGrayMedium = Color(0xFF9E9E9E)
+val PawGrayDark = Color(0xFF212121)
+
+val White = Color(0xFFFFFFFF)
+val Black = Color(0xFF000000)

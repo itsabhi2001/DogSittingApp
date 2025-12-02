@@ -1,47 +1,48 @@
 package com.abhimanyu.dogsitting.mobile
 
 import android.os.Bundle
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.abhimanyu.dogsitting.mobile.ui.theme.DogsittingAppTheme
-
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.abhimanyu.dogsitting.mobile.ui.bookinglist.BookingListScreen
+import com.abhimanyu.dogsitting.mobile.ui.bookinglist.BookingListViewModel
+import com.abhimanyu.dogsitting.mobile.ui.theme.DogSittingTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            DogsittingAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            DogSittingTheme() {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    BookingAppRoot()
                 }
             }
         }
     }
 }
-
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
+fun BookingAppRoot() {
+    // Get or create a ViewModel tied to this composition / Activity
+    val bookingListViewModel: BookingListViewModel = viewModel()
+    val uiState = bookingListViewModel.uiState
+
+    BookingListScreen(
+        uiState = uiState,
+        onRefresh = { bookingListViewModel.loadBookings() },
+        onCreateBookingClick = {
+            // TODO: navigate to Create Booking screen (we'll add Navigation soon)
+        },
+        onBookingClick = { booking ->
+            // TODO: navigate to a Booking Details / Status Update screen
+        }
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DogsittingAppTheme {
-        Greeting("Android")
-    }
-}
