@@ -1,4 +1,8 @@
 package com.abhimanyu.dogsitting.mobile.data.models
 
-class BookingStatsResponse {
-}
+data class BookingStatsResponse(
+    val total: Int,
+    val pending: Int,
+    val confirmed: Int,
+    val canceled: Int
+)

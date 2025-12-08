@@ -1,4 +1,8 @@
 package com.abhimanyu.dogsitting.mobile.data.models
 
-class PriceEstimateRequest {
-}
+data class PriceEstimateRequest(
+    val serviceType: String,
+    val petSize: String,
+    val startDate: String,
+    val endDate: String
+)

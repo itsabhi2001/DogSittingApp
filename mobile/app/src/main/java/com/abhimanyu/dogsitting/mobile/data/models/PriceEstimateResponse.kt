@@ -1,4 +1,5 @@
 package com.abhimanyu.dogsitting.mobile.data.models
 
-class PriceEstimateResponse {
-}
+data class PriceEstimateResponse(
+    val estimatedPrice: Double
+)

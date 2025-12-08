@@ -56,7 +56,10 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.4")
     implementation("androidx.navigation:navigation-compose:2.8.4")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-
+    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.compose.foundation:foundation:1.7.5")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.foundation:foundation-layout")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

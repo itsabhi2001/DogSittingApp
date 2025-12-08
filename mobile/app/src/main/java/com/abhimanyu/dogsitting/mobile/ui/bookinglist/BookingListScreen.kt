@@ -25,17 +25,23 @@ fun BookingListScreen(
     uiState: BookingListUiState,
     onRefresh: () -> Unit,
     onCreateBookingClick: () -> Unit,
-    onBookingClick: (BookingResponse) -> Unit
+    onBookingClick: (BookingResponse) -> Unit,
+    onDashboardClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Bookings") },
                 actions = {
+                    Button(onClick = onDashboardClick) {
+                        Text("Dashboard")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = onCreateBookingClick) {
                         Text("New")
                     }
                 }
+
             )
         }
     ) { innerPadding ->
