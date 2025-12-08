@@ -1,4 +1,4 @@
-package com.abhimanyu.dogsitting.mobile.data.models
+package com.abhimanyu.dogsitting.shared.models
 
 data class PriceEstimateRequest(
     val serviceType: String,

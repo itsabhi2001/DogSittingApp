@@ -1,10 +1,10 @@
 package com.abhimanyu.dogsitting.mobile.data.remote
 
-import com.abhimanyu.dogsitting.mobile.data.models.BookingResponse
-import com.abhimanyu.dogsitting.mobile.data.models.BookingRequest
-import com.abhimanyu.dogsitting.mobile.data.models.BookingStatsResponse
-import com.abhimanyu.dogsitting.mobile.data.models.PriceEstimateRequest
-import com.abhimanyu.dogsitting.mobile.data.models.PriceEstimateResponse
+import com.abhimanyu.dogsitting.shared.models.BookingResponse
+import com.abhimanyu.dogsitting.shared.models.BookingRequest
+import com.abhimanyu.dogsitting.shared.models.BookingStatsResponse
+import com.abhimanyu.dogsitting.shared.models.PriceEstimateRequest
+import com.abhimanyu.dogsitting.shared.models.PriceEstimateResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH

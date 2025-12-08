@@ -1,5 +1,6 @@
 package com.abhimanyu.dogsitting.mobile.ui.bookingdetail
 
+import android.app.Service
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,12 +8,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abhimanyu.dogsitting.mobile.data.remote.RetrofitClient
-import com.abhimanyu.dogsitting.mobile.data.repository.BookingRepository
-import com.abhimanyu.dogsitting.mobile.ui.createbooking.CreateBookingUiState
+import com.abhimanyu.dogsitting.mobile.data.repository.AndroidBookingRepository
+import com.abhimanyu.dogsitting.mobile.di.ServiceLocator
+import com.abhimanyu.dogsitting.shared.domain.usecase.GetBookingByIdUseCase
+import com.abhimanyu.dogsitting.shared.domain.usecase.UpdateBookingStatusUseCase
 import kotlinx.coroutines.launch
 
 class BookingDetailViewModel (
-    private val repository: BookingRepository = BookingRepository(RetrofitClient.bookingApiService)
+    private val getBookingById: GetBookingByIdUseCase = ServiceLocator.getBookingByIdUseCase,
+    private val updateStatus: UpdateBookingStatusUseCase = ServiceLocator.updateBookingStatusUseCase
 ): ViewModel(){
     var uiState by mutableStateOf(BookingDetailUiState())
         private set
@@ -21,7 +25,7 @@ class BookingDetailViewModel (
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true, errorMessage =  null)
             try {
-                val booking = repository.getBookingById(id)
+                val booking = getBookingById(id)
                 uiState = uiState.copy(
                     isLoading = false,
                     booking = booking,
@@ -45,7 +49,7 @@ class BookingDetailViewModel (
                 errorMessage = null
             )
             try {
-                val updated = repository.updateStatus(bookingId, newStatus)
+                val updated = updateStatus(bookingId, newStatus)
                 uiState = uiState.copy(
                     isUpdatingStatus = false,
                     booking = updated

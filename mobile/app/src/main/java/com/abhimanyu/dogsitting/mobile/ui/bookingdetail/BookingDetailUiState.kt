@@ -1,6 +1,6 @@
 package com.abhimanyu.dogsitting.mobile.ui.bookingdetail
 
-import com.abhimanyu.dogsitting.mobile.data.models.BookingResponse
+import com.abhimanyu.dogsitting.shared.models.BookingResponse
 
 data class BookingDetailUiState(
     val isLoading: Boolean = false,

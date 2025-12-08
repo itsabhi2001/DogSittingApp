@@ -5,11 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abhimanyu.dogsitting.mobile.data.remote.RetrofitClient
-import com.abhimanyu.dogsitting.mobile.data.repository.BookingRepository
+import com.abhimanyu.dogsitting.mobile.di.ServiceLocator
+import com.abhimanyu.dogsitting.shared.domain.usecase.GetBookingUseCase
 import kotlinx.coroutines.launch
 
-class BookingListViewModel(private val repository: BookingRepository = BookingRepository(RetrofitClient.bookingApiService)) : ViewModel() {
+class BookingListViewModel(
+    private val getBookingsUseCase: GetBookingUseCase = ServiceLocator.getBookingUsecase
+) : ViewModel() {
+
     var uiState by mutableStateOf(BookingListUiState())
         private set
 
@@ -24,18 +27,64 @@ class BookingListViewModel(private val repository: BookingRepository = BookingRe
 
         viewModelScope.launch {
             try {
-                val bookings = repository.getAllBookings()
+                val bookings = getBookingsUseCase()
+
+                // Save raw list, then apply current filters
                 uiState = uiState.copy(
                     isLoading = false,
-                    bookings = bookings,
-                    errorMessage = null
+                    errorMessage = null,
+                    allBookings = bookings
                 )
+                applyFilters()
             } catch (e: Exception) {
                 uiState = uiState.copy(
                     isLoading = false,
-                    errorMessage = e.message ?: "Unexpected error."
+                    errorMessage = e.message ?: "Unexpected error.",
+                    allBookings = emptyList(),
+                    filteredBookings = emptyList()
                 )
             }
         }
+    }
+
+
+    fun updateSearchQuery(query: String) {
+        uiState = uiState.copy(searchQuery = query)
+        applyFilters()
+    }
+
+
+    fun updateStatusFilter(filter: StatusFilter) {
+        uiState = uiState.copy(statusFilter = filter)
+        applyFilters()
+    }
+
+
+    private fun applyFilters() {
+        val state = uiState
+        val query = state.searchQuery.trim().lowercase()
+        var result = state.allBookings
+
+        // Text search: client name, pet name, serviceType, status
+        if (query.isNotEmpty()) {
+            result = result.filter { booking ->
+                booking.clientName.contains(query, ignoreCase = true) ||
+                        booking.petName.contains(query, ignoreCase = true) ||
+                        booking.serviceType.contains(query, ignoreCase = true) ||
+                        booking.status.contains(query, ignoreCase = true)
+            }
+        }
+
+        // Status filter
+        result = result.filter { booking ->
+            when (state.statusFilter) {
+                StatusFilter.ALL -> true
+                StatusFilter.PENDING -> booking.status == "PENDING"
+                StatusFilter.CONFIRMED -> booking.status == "CONFIRMED"
+                StatusFilter.CANCELED -> booking.status == "CANCELED"
+            }
+        }
+
+        uiState = state.copy(filteredBookings = result)
     }
 }

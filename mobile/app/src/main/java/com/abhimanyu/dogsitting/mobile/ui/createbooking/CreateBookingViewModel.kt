@@ -6,16 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abhimanyu.dogsitting.mobile.data.models.BookingRequest
-import com.abhimanyu.dogsitting.mobile.data.models.PriceEstimateRequest
-import com.abhimanyu.dogsitting.mobile.data.models.PriceEstimateResponse
-import com.abhimanyu.dogsitting.mobile.data.remote.RetrofitClient
-import com.abhimanyu.dogsitting.mobile.data.repository.BookingRepository
+import com.abhimanyu.dogsitting.shared.models.BookingRequest
+import com.abhimanyu.dogsitting.shared.models.PriceEstimateRequest
+import com.abhimanyu.dogsitting.mobile.di.ServiceLocator
+import com.abhimanyu.dogsitting.shared.domain.usecase.CreateBookingUseCase
+import com.abhimanyu.dogsitting.shared.domain.usecase.EstimatePriceUseCase
 import kotlinx.coroutines.launch
 
 class CreateBookingViewModel(
-    private val repository: BookingRepository =
-        BookingRepository(RetrofitClient.bookingApiService)
+    private val createBooking: CreateBookingUseCase = ServiceLocator.createBookingUseCase,
+    private val estimatePriceUseCase: EstimatePriceUseCase = ServiceLocator.estimatePriceUseCase
 ) : ViewModel() {
 
     var uiState by mutableStateOf(CreateBookingUiState())
@@ -85,7 +85,7 @@ class CreateBookingViewModel(
             try {
                 val request = buildEstimateRequest()
                 Log.d("EstimateDebug", "Sending estimate request: $request")
-                val response = repository.estimatePrice(request)
+                val response = estimatePriceUseCase(request)
                 Log.d("EstimateDebug", "New estimatedPrice: ${response.estimatedPrice}")
 
                 uiState = uiState.copy(
@@ -119,7 +119,7 @@ class CreateBookingViewModel(
             )
             try {
                 val request = buildRequest()
-                val created = repository.createBooking(request)
+                val created = createBooking(request)
                 uiState = uiState.copy(
                     isSubmitting = false,
                     successMessage = "Booking created for ${created.petName}",

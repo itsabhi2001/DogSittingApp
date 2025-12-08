@@ -7,11 +7,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abhimanyu.dogsitting.mobile.data.remote.RetrofitClient
-import com.abhimanyu.dogsitting.mobile.data.repository.BookingRepository
+import com.abhimanyu.dogsitting.mobile.data.repository.AndroidBookingRepository
+import com.abhimanyu.dogsitting.mobile.di.ServiceLocator
+import com.abhimanyu.dogsitting.shared.domain.usecase.GetDashboardStatsUseCase
 import kotlinx.coroutines.launch
 
-class DashboardViewModel (private val repository: BookingRepository =
-    BookingRepository(RetrofitClient.bookingApiService)
+class DashboardViewModel (private val getStats: GetDashboardStatsUseCase = ServiceLocator.getDashboardStatsUseCase
 ) : ViewModel() {
 
     var uiState by mutableStateOf(DashboardUiState())
@@ -24,7 +25,7 @@ class DashboardViewModel (private val repository: BookingRepository =
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true, errorMessage = null)
             try {
-                val stats = repository.getStats()
+                val stats = getStats()
                 uiState = uiState.copy(
                     isLoading = false,
                     stats = stats,
