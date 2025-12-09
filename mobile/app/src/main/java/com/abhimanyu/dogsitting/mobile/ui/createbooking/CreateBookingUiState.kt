@@ -14,5 +14,12 @@ data class CreateBookingUiState(
     val isEstimating: Boolean = false,
     val estimatedPrice: Double? = null,
     val errorMessage: String? = null,
-    val successMessage: String? = null
+    val successMessage: String? = null,
+
+    val clientNameError: String? = null,
+    val clientEmailError: String? = null,
+    val petNameError: String? = null,
+    val petSizeError: String? = null,
+    val serviceTypeError: String? = null,
+    val dateError: String? = null
 )

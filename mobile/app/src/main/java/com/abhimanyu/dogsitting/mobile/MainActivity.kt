@@ -115,6 +115,7 @@ fun BookingAppRoot() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("booking_list") {
+                val bookingListViewModel: BookingListViewModel = viewModel()
                 val uiState = bookingListViewModel.uiState
 
                 BookingListScreen(
@@ -126,7 +127,6 @@ fun BookingAppRoot() {
                     onBookingClick = { booking ->
                         navController.navigate("booking_details/${booking.id}")
                     },
-                    // You can keep this or remove it later once you rely on bottom nav
                     onDashboardClick = {
                         navController.navigate("dashboard")
                     },

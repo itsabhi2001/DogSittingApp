@@ -163,28 +163,49 @@ fun CreateBookingScreen(
                 value = uiState.clientName,
                 onValueChange = onClientNameChange,
                 label = { Text("Client Name") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                isError = uiState.clientNameError != null
             )
+
+            if (uiState.clientNameError != null) {
+                Text(
+                    text = uiState.clientNameError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
 
             OutlinedTextField(
                 value = uiState.clientEmail,
                 onValueChange = onClientEmailChange,
                 label = { Text("Client Email") },
                 modifier = Modifier.fillMaxWidth(),
-                /*
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                )
-
-                 */
+                isError = uiState.clientEmailError != null
             )
+
+            if (uiState.clientEmailError != null) {
+                Text(
+                    text = uiState.clientEmailError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
 
             OutlinedTextField(
                 value = uiState.petName,
                 onValueChange = onPetNameChange,
                 label = { Text("Pet Name") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                isError = uiState.petNameError != null
             )
+
+            if (uiState.petNameError != null) {
+                Text(
+                    text = uiState.petNameError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
 
             // --- Pet Size slider ---
             Text(
@@ -237,6 +258,13 @@ fun CreateBookingScreen(
                 },
                 style = MaterialTheme.typography.bodyMedium
             )
+            if (uiState.petSizeError != null) {
+                Text(
+                    text = uiState.petSizeError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
 
             // --- Service type segmented buttons ---
             Text(
@@ -258,6 +286,14 @@ fun CreateBookingScreen(
                     )
                 }
             }
+            if (uiState.serviceTypeError != null) {
+                Text(
+                    text = uiState.serviceTypeError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
 
             // --- Date range picker (start + end) ---
             Text(
@@ -290,6 +326,13 @@ fun CreateBookingScreen(
                         .clickable { showDateRangePicker = true },
                     enabled = false,
                     readOnly = true
+                )
+            }
+            if (uiState.dateError != null) {
+                Text(
+                    text = uiState.dateError,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
